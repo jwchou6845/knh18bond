@@ -2,3 +2,4 @@ streamlit
 pandas
 pyairtable
 python-dotenv
+plotly

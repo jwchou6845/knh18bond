@@ -5,4 +5,4 @@ from ui_core import setup_app_ui, alert_card
 
 # --- 1. 頁面基本設定 (必須在第一行) ---
 st.set_page_config(page_title="交接班紀錄 | KNH MMS", layout="wide", initial_sidebar_state="collapsed")
-setup_app_ui(user_name="周正偉")
+setup_app_ui(user_name="admin")

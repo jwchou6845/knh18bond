@@ -7,7 +7,7 @@ from ui_core import setup_app_ui
 
 # --- 1. 頁面基本設定 ---
 st.set_page_config(page_title="打料作業 | KNH MMS", layout="wide", initial_sidebar_state="collapsed")
-setup_app_ui(user_name="周正偉")
+setup_app_ui(user_name="admin")
 
 
 # --- 2. 資料庫抓取引擎 (精準分流版) ---

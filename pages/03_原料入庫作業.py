@@ -104,7 +104,7 @@ with tab2:
             
         with col2:
             # 🌟 新增：入庫日期欄位
-            input_date_rec = st.date_input("🗓️ 入庫/造粒日期", datetime.today())
+            input_date_rec = st.date_input("🗓️ 入庫日期", datetime.today())
             input_weight_rec = st.number_input("⚖️ 重量 (KG)", min_value=0.0, value=None, placeholder="請輸入重量...") 
             input_vendor_rec = st.selectbox("📍 供應商", ["南紡", "南紡308A", "南亞", "遠東", "遠東RPET", "集盛", "力鵬", "中國岳化", "中國儀征"])
 

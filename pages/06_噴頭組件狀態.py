@@ -120,7 +120,18 @@ if records:
                         default_index = 0
                         
                     new_status = st.selectbox("更新狀態", status_options, index=default_index, key=f"status_{rec_id}")
-                    new_spec = st.text_input("更新分配板規格", value=current_spec, key=f"spec_{rec_id}")
+                    # 1. 定義 Airtable 裡的選項 (新增了「無」)
+                    spec_options = ["32分割", "15分割", "無"]
+        
+                    # 2. 防呆機制：找出目前規格在選單中的位置
+                    try:
+                        spec_default_index = spec_options.index(current_spec)
+                    except ValueError:
+                    # 💡 貼心設定：如果目前資料庫是空的或抓不到資料，預設讓選單停在「無」(清單的第 3 個，索引值為 2)
+                        spec_default_index = 2  
+            
+                    # 3. 產生下拉選單 (selectbox)
+                    new_spec = st.selectbox("更新分配板規格", spec_options, index=spec_default_index, key=f"spec_{rec_id}")
                     
                     submit_btn = st.form_submit_button("💾 儲存變更", use_container_width=True)
                     

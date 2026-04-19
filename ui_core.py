@@ -65,8 +65,7 @@ def setup_app_ui(user_name="admin"):
     css_style = """
     <style>
         /* 🧹 隱藏 Streamlit 原生元素 */
-        [data-testid="stToolbar"] { display: none !important; visibility: hidden !important; }
-        [data-testid="stAppToolbar"] { display: none !important; } /* 針對最新版 Cloud 工具列 */
+        
         [data-testid="stAppDeployButton"] { display: none !important; }
         .viewerBadge_container__1QSob, .viewerBadge_link__1S137, div[class^="viewerBadge"] { display: none !important; }
         footer { display: none !important; }
@@ -137,8 +136,7 @@ def setup_app_ui(user_name="admin"):
         }
 
         const hitList = [
-            '[data-testid="stToolbar"]',
-            '[data-testid="stAppToolbar"]',
+            
             '[data-testid="stAppDeployButton"]',
             '[class^="viewerBadge"]',
             'footer'

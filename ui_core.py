@@ -46,14 +46,9 @@ def setup_app_ui(user_name="admin"):
     """
     設定全域 UI，包含防護鎖、隱藏預設選單、設定頂部導覽列
     """
-    # 🛑 絕對攔截點：在載入任何 UI 之前，先查驗密碼！
     if not check_password():
-        st.stop() # 如果沒登入，整個頁面的渲染就停在這裡，完全保護資料！
+        st.stop() 
 
-    # ==========================================
-    # 以下是你原本的頂部導覽列與樣式設定 (只有登入成功才會執行到這裡)
-    # ==========================================
-    
     # 嘗試抓取 Logo
     import base64
     from pathlib import Path
@@ -63,12 +58,53 @@ def setup_app_ui(user_name="admin"):
     except Exception:
         logo_base64 = ""
 
-    # 注入 CSS 與頂部導覽列 HTML
-    st.markdown(f"""
+    # ==========================================
+    # 🧹 第一包：你喜歡的變數寫法 (專門用來隱藏東西)
+    # ==========================================
+    hide_streamlit_style = """
     <style>
-        header[data-testid="stHeader"] {{ background-color: transparent !important; z-index: 999999 !important; }}
-        button[kind="header"] {{ color: #111 !important; }}
-        .stAppDeployButton {{ display: none !important; }}
+        /* 1. 隱藏頂部工具列 (Fork、星星、GitHub) */
+        [data-testid="stToolbar"] { display: none !important; visibility: hidden !important; }
+        
+        /* 2. 隱藏部署按鈕 */
+        [data-testid="stAppDeployButton"] { display: none !important; }
+        
+        /* 3. 隱藏右下角 Made with Streamlit 皇冠與浮水印 (這才是皇冠的真名！) */
+        .viewerBadge_container__1QSob, .viewerBadge_link__1S137, div[class^="viewerBadge"] { display: none !important; }
+        
+        /* 4. 隱藏底部 footer */
+        footer { display: none !important; }
+        
+        /* 5. 隱藏標題旁邊的定錨小鎖鏈 */
+        a.header-anchor { display: none !important; }
+        .stMarkdown a svg { display: none !important; }
+
+        /* ⚠️ 6. 處理 header：千萬不能 display: none！改成透明，保留漢堡選單按鈕 */
+        header[data-testid="stHeader"] { background-color: transparent !important; z-index: 999999 !important; }
+        button[kind="header"] { color: #111 !important; }
+        
+        /* 隱藏原生頂部彩色裝飾線 */
+        [data-testid="stDecoration"] { display: none !important; }
+        
+        /* 微調側邊欄與主要內容的距離 */
+        [data-testid="stSidebar"] { margin-top: 56px !important; height: calc(100vh - 56px) !important; }
+        [data-testid="block-container"] { padding-top: 80px !important; }
+        [data-testid="stSidebarNav"] li:first-child { display: none !important; }
+    </style>
+    """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+
+    # ==========================================
+    # 🎨 第二包：我們的專屬畫面與手機咒語
+    # ==========================================
+    custom_ui_html = f"""
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#F4F5F5">
+
+    <style>
+        /* 自訂頂部導覽列 CSS (這邊因為有用到 f-string，所以要用雙大括號 {{ }}) */
         .custom-top-bar {{ position: fixed; top: 0; left: 0; right: 0; height: 56px; background-color: #F4F5F5; border-bottom: 1px solid #DCDCDC; z-index: 999990; display: flex; justify-content: space-between; align-items: center; padding-right: 20px; padding-left: 60px; }}
         .top-bar-left {{ display: flex; align-items: center; gap: 12px; }}
         .top-bar-logo {{ width: 28px; height: 28px; object-fit: contain; }}
@@ -76,13 +112,8 @@ def setup_app_ui(user_name="admin"):
         .top-bar-right {{ display: flex; align-items: center; gap: 10px; cursor: pointer; }}
         .top-bar-user-name {{ font-size: 14px; font-weight: 500; color: #333; }}
         .top-bar-avatar {{ width: 30px; height: 30px; border-radius: 50%; background-color: #EAEBEB; color: #555; display: flex; justify-content: center; align-items: center; font-size: 14px; border: 1px solid #DCDCDC; }}
-        [data-testid="stSidebar"] {{ margin-top: 56px !important; height: calc(100vh - 56px) !important; }}
-        [data-testid="block-container"] {{ padding-top: 80px !important; }}
-        [data-testid="stSidebarNav"] li:first-child {{ display: none !important; }}
-        /* 隱藏標題旁邊的定錨小鎖鏈 */
-        a.header-anchor {{ display: none !important; }}
-        .stMarkdown a svg {{ display: none !important; }}
     </style>
+    
     <div class="custom-top-bar">
         <div class="top-bar-left">
             <img src="data:image/webp;base64,{logo_base64}" class="top-bar-logo">
@@ -93,8 +124,9 @@ def setup_app_ui(user_name="admin"):
             <div class="top-bar-avatar">👤</div>
         </div>
     </div>
-    """, unsafe_allow_html=True)
-
+    """
+    st.markdown(custom_ui_html, unsafe_allow_html=True)
+    
 def alert_card(title, value, subtitle=""):
     """
     Dieter Rams 風格的紅色警報卡片 (用於低水位預警)
